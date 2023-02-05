@@ -2,7 +2,7 @@
 # Name your project! Project names should contain only lowercase characters
 # and underscores. A good package name should reflect your organization's
 # name or the intended use of these models
-name: 'my_new_project'
+name: 'dbt_training'
 version: '1.0.0'
 config-version: 2
 
@@ -31,8 +31,65 @@ clean-targets:         # directories to be removed by `dbt clean`
 # In this example config, we tell dbt to build all models in the example/ directory
 # as tables. These settings can be overridden in the individual model files
 # using the `{{ config(...) }}` macro.
-models:
-  my_new_project:
+#models:
+#  my_new_project:
     # Applies to all files under models/example/
-    example:
+#    example:
+#      materialized: view
+models:
+  dbt_training:
+    +materialized: table
+    app:
+      hr:
+        +materialized: table
+        +schema: stg
+        +database: |
+          {%- if target.name == "default" -%} dbt_dev
+          {%- elif target.name == "dev" -%} dbt_dev
+          {%- elif target.name == "qa" -%} dbt_qa
+          {%- elif target.name == "prd" -%} dbt_prd
+          {%- else -%} invalid_target_name_please_check
+          {%- endif -%}
+
+    tempfolder:
       materialized: view
+      +schema: stg
+      +database: |
+        {%- if target.name == "default" -%} dbt_dev
+        {%- elif target.name == "dev" -%} dbt_dev
+        {%- elif target.name == "qa" -%} dbt_qa
+        {%- elif target.name == "prd" -%} dbt_prd
+        {%- else -%} invalid_target_name_please_check
+        {%- endif -%}
+
+    example:
+      +materialized: view
+      +schema: stg
+      +database: |
+        {%- if target.name == "default" -%} dbt_dev
+        {%- elif target.name == "dev" -%} dbt_dev
+        {%- elif target.name == "qa" -%} dbt_qa
+        {%- elif target.name == "prd" -%} dbt_prd
+        {%- else -%} invalid_target_name_please_check
+        {%- endif -%}
+
+seeds:
+  +schema: src
+  +quote_columns: false
+  +database: |
+    {%- if target.name == "default" -%} dbt_dev
+    {%- elif target.name == "dev" -%} dbt_dev
+    {%- elif target.name == "qa" -%} dbt_qa
+    {%- elif target.name == "prd" -%} dbt_prd
+    {%- else -%} invalid_target_name_please_check
+    {%- endif -%}
+
+snapshots:
+  +target_schema: dw
+  +database: |
+    {%- if target.name == "default" -%} dbt_dev
+    {%- elif target.name == "dev" -%} dbt_dev
+    {%- elif target.name == "qa" -%} dbt_qa
+    {%- elif target.name == "prd" -%} dbt_prd
+    {%- else -%} invalid_target_name_please_check
+    {%- endif -%}
