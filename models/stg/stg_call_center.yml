@@ -1,0 +1,13 @@
+#This is a specific test for a single model. Refer models/schema.yml for project level generic tests.
+#version: 2
+#models:
+#    - name: stg_call_center
+#      columns: 
+#        - name: cc_call_center_id
+#          tests:
+#            - unique
+#            - not_null
+#        - name: cc_rec_start_date
+#          tests:
+#            - unique
+#            - not_null
