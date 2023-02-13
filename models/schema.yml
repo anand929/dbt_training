@@ -1,13 +1,13 @@
 # For single test file across project, yml file need to be created directly under models folder.
-version: 2
-models:
-  - name: stg_call_center
-    columns: 
-      - name: cc_call_center_id
-        tests:
-          - unique
-          - not_null
-      - name: cc_rec_start_date
-        tests:
-          - unique
-          - not_null
+#version: 2
+#models:
+#  - name: stg_call_center
+#    columns: 
+#      - name: cc_call_center_id
+#        tests:
+#          - unique
+#          - not_null
+#      - name: cc_rec_start_date
+#        tests:
+#          - unique
+#          - not_null

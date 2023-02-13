@@ -13,4 +13,7 @@ sources:
 
     tables:
       - name: call_center_test
-      - name: seed_dept
+      - name: product
+      - name: employee
+      - name: company
+      - name: rules

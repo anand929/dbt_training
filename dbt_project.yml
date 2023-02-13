@@ -57,6 +57,18 @@ models:
         {%- else -%} invalid_target_name_please_check
         {%- endif -%}
 
+    edw:
+      materialized: table
+      +schema: edw
+      +database: |
+        {%- if target.name == "default" -%} dbt_dev
+        {%- elif target.name == "dev" -%} dbt_dev
+        {%- elif target.name == "qa" -%} dbt_qa
+        {%- elif target.name == "prd" -%} dbt_prd
+        {%- else -%} invalid_target_name_please_check
+        {%- endif -%}
+
+
     example:
       +enabled: true
       +materialized: view
@@ -81,7 +93,7 @@ seeds:
     {%- endif -%}
 
 snapshots:
-  +target_schema: dw
+  +target_schema: stg
   +database: |
     {%- if target.name == "default" -%} dbt_dev
     {%- elif target.name == "dev" -%} dbt_dev
