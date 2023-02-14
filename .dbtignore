@@ -2,3 +2,4 @@
 models/example/
 analyses/test_analytics.sql
 models/stg/stg_call_center.sql
+models/stg/jinja_practice.sql
