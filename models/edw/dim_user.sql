@@ -1,14 +1,45 @@
+{{
+    config(
+        materialized= 'incremental'
+        ,unique_key='EMPLOYEE_ID'
+        ,incremental_strategy='merge'
+    )
+}}
+
+WITH stg as (
     SELECT 
-    CAST(ROW_NUMBER() OVER(ORDER BY EMPLOYEE_ID) AS INTEGER) AS USER_KEY
-    ,EMPLOYEE_ID
-    ,EMPLOYEE_NAME
-    ,DEPARTMENT_ID
-    ,EMAIL
-    ,PHONE
-    ,ADDRESS
-    ,HIRE_DATE
-    ,EMPLOYMENT_STATUS
-    ,MD5_COLUMN
-    ,SNOW_INSERT_TIME
-    ,SNOW_UPDATE_TIME
-    FROM {{ ref('stg_dim_user')}}
+    md5(stg.EMPLOYEE_ID) AS USER_KEY
+    ,stg.EMPLOYEE_ID
+    ,stg.EMPLOYEE_NAME
+    ,stg.DEPARTMENT_ID
+    ,stg.EMAIL
+    ,stg.PHONE
+    ,stg.ADDRESS
+    ,stg.HIRE_DATE
+    ,stg.EMPLOYMENT_STATUS
+    ,stg.MD5_COLUMN
+    ,stg.SNOW_INSERT_TIME
+    ,stg.SNOW_UPDATE_TIME
+    FROM {{ ref('stg_dim_user')}} stg 
+{% if is_incremental() %}
+    WHERE (stg.SNOW_INSERT_TIME > (SELECT MAX(SNOW_INSERT_TIME) FROM {{ this }}))
+    OR 
+    (stg.SNOW_UPDATE_TIME > (SELECT MAX(SNOW_UPDATE_TIME) FROM {{ this }}))
+{% endif %}    
+)
+SELECT 
+stg.USER_KEY
+,stg.EMPLOYEE_ID
+,stg.EMPLOYEE_NAME
+,stg.DEPARTMENT_ID
+,stg.EMAIL
+,stg.PHONE
+,stg.ADDRESS
+,stg.HIRE_DATE
+,stg.EMPLOYMENT_STATUS
+,stg.MD5_COLUMN
+,stg.SNOW_INSERT_TIME
+,stg.SNOW_UPDATE_TIME
+FROM stg 
+LEFT JOIN {{ this }} dim 
+ON nvl(stg.EMPLOYEE_ID,0)=nvl(dim.EMPLOYEE_ID,0)
