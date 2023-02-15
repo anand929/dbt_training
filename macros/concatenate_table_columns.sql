@@ -1,4 +1,4 @@
-{% macro concatenate_table_columns(schema_name='SRC', relation_name='EMPLOYEE') -%}
+{% macro concatenate_table_columns(schema_name, relation_name,exclude_column=[]) -%}
     select 
         'nvl(cast('||COLUMN_NAME|| ' as varchar),'''')' as COLUMN_NAME
         from           
@@ -9,5 +9,7 @@
         {%- else -%}  
         {%- endif %}.information_schema.columns 
         where table_schema='{{schema_name}}' and table_name='{{relation_name}}'
-
+        {%- if exclude_column|length>0 %}
+        and COLUMN_NAME NOT IN ('{{exclude_column|join("','")}}')
+        {%- endif %}
 {%- endmacro %}
