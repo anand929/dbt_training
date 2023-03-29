@@ -1,8 +1,9 @@
 {{
     config(
         materialized= 'incremental'
-        ,unique_key='EMPLOYEE_ID'
+        ,unique_key='USER_KEY'
         ,incremental_strategy='merge'
+        ,pre_hook='{{ udpate_stg_dim_user_timestamp() }}'
     )
 }}
 

@@ -93,7 +93,7 @@ seeds:
     {%- endif -%}
 
 snapshots:
-  +target_schema: stg
+  +target_schema: edw
   +database: |
     {%- if target.name == "default" -%} dbt_dev
     {%- elif target.name == "dev" -%} dbt_dev

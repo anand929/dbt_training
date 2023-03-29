@@ -1,6 +1,6 @@
 {# Below call statement uses a macro to return concatenated columns for a specified table #}
 {%- call statement('linkresult', fetch_result=True) -%}
-    {{ get_md5_statement('SRC','EMPLOYEE',['EMPLOYEE_ID']) }}
+    {{ get_md5_statement('SRC','EMPLOYEE',['EMPLOYEE_ID','SNOW_INSERT_TIME','SNOW_UPDATE_TIME']) }}
 {%- endcall -%}
 {%- set var_MD5Column = load_result('linkresult')['data'][0][0] -%}
 

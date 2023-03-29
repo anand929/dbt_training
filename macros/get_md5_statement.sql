@@ -1,5 +1,6 @@
 {% macro get_md5_statement(schema_name, relation_name,exclude_column=[]) -%}
-    select 'md5('||listagg(COLUMN_NAME,' || ')||')' AS MD5Column from (
+    select 'md5('||listagg(COLUMN_NAME,' || ')||')' AS MD5Column from 
+    (
         select 
         'nvl(cast('||COLUMN_NAME|| ' as varchar),'''')' as COLUMN_NAME
         from           
